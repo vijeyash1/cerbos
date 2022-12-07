@@ -19,5 +19,4 @@ type CerbosPayload struct {
 
 type Response struct {
 	Response string
-	Errors   string
 }

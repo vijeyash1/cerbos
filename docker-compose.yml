@@ -8,23 +8,21 @@ services:
     volumes:
       - ./cerbos/config:/config
       - ./cerbos/policies:/policies
-    depends_on:
-      - postgresd
     ports:
       - 3592:3592
       - 3593:3593
     networks:
       - intranet
-  postgresd:
-    image: postgres:9.6
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=core
-      - POSTGRES_PASSWORD=core
-      - POSTGRES_DB=core
-    networks:
-      - intranet
+  # postgresd:
+  #   image: postgres:9.6
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_USER=core
+  #     - POSTGRES_PASSWORD=core
+  #     - POSTGRES_DB=core
+  #   networks:
+  #     - intranet
   # pgadmin:
   #   image: dpage/pgadmin4
   #   container_name: pgadmin
