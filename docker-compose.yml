@@ -8,16 +8,51 @@ services:
     volumes:
       - ./cerbos/config:/config
       - ./cerbos/policies:/policies
+    depends_on:
+      - postgresd
     ports:
       - 3592:3592
       - 3593:3593
-
+    networks:
+      - intranet
+  postgresd:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=core
+      - POSTGRES_PASSWORD=core
+      - POSTGRES_DB=core
+    networks:
+      - intranet
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin
+  #   restart: "no"
+  #   volumes:
+  #     - pgadmin:/var/lib/pgadmin
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=core@example.com
+  #     - PGADMIN_DEFAULT_PASSWORD=core
+  #   ports:
+  #     - "5433:80"
+  #   networks:
+  #     - intranet
   admin-api:
     container_name: admin-api
     build: .
     environment:
       - CERBOS_HOST=cerbos
     ports:
-      - 8090:8090
+      - 8080:8080
     depends_on:
       - cerbos
+    networks:
+      - intranet
+
+
+networks:
+  intranet:
+volumes:
+  pgadmin:
+    name: vol-pgadmin
