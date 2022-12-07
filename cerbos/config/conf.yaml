@@ -12,9 +12,9 @@ server:
     enabled: true
 
 storage:
-  driver: "sqlite3"
-  sqlite3:
-    dsn: ":memory:"
+  driver: "postgres"
+  postgres:
+    url: "postgres://core:core@postgresd:5432/core?sslmode=disable&search_path=cerbos"
 
 audit:
   enabled: true # Set to false to completely disable audit logging.
