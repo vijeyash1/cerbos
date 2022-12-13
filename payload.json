@@ -2,6 +2,31 @@
 	"policyKind": "resource",
 	"policies": [{
 		"apiVersion": "api.cerbos.dev/v1",
+       
+		"resourcePolicy": {
+			"version": "default",
+			"resource": "contact",
+            "scope": "nokia",
+			"rules": [{
+
+					"roles": "user",
+					"actions": ["read", "list"],
+					"effect": "EFFECT_ALLOW"
+
+				}
+
+			]
+		}
+	}]
+}
+
+
+
+{
+	"policyKind": "resource",
+	"policies": [{
+		"apiVersion": "api.cerbos.dev/v1",
+       
 		"resourcePolicy": {
 			"version": "default",
 			"resource": "contact",
@@ -10,13 +35,6 @@
 
 					"roles": "admin",
 					"actions": ["create", "update", "delete", "read", "list"],
-					"effect": "EFFECT_ALLOW"
-
-				},
-				{
-
-					"roles": "user",
-					"actions": ["read", "list"],
 					"effect": "EFFECT_ALLOW"
 
 				}
