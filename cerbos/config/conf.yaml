@@ -12,9 +12,9 @@ server:
     enabled: true
 
 storage:
-  driver: "sqlite3"
-  sqlite3:
-    dsn: ":memory:"
+  driver: "mysql"
+  mysql:
+    dsn: "core:core@tcp(database:3306)/cerbos"
 
 audit:
   enabled: true # Set to false to completely disable audit logging.

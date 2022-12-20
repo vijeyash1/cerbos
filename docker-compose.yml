@@ -13,16 +13,23 @@ services:
       - 3593:3593
     networks:
       - intranet
-  # postgresd:
-  #   image: postgres:9.6
-  #   ports:
-  #     - "5432:5432"
-  #   environment:
-  #     - POSTGRES_USER=core
-  #     - POSTGRES_PASSWORD=core
-  #     - POSTGRES_DB=core
-  #   networks:
-  #     - intranet
+  database:
+    image: mysql
+    volumes:
+      - mysqldb:/var/lib/mysql
+      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=core
+      - MYSQL_DATABASE=cerbos
+      - MYSQL_USER=core
+      - MYSQL_PASSWORD=core
+    ports:
+    - "3306:3306" 
+    networks:
+      - intranet
+ 
+  
   # pgadmin:
   #   image: dpage/pgadmin4
   #   container_name: pgadmin
@@ -45,6 +52,7 @@ services:
       - 8080:8080
     depends_on:
       - cerbos
+      - database
     networks:
       - intranet
 
@@ -52,5 +60,5 @@ services:
 networks:
   intranet:
 volumes:
-  pgadmin:
-    name: vol-pgadmin
+  mysqldb:
+    name: vol-mysqldb

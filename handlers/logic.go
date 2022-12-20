@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"api/model"
 
@@ -16,19 +17,17 @@ func CheckPolicy(datas *model.CerbosPayload, cli client.Client, g *gin.Context) 
 	for _, data := range datas.Policies {
 		for i, policy := range data.ResourcePolicy.Rules {
 			principal := client.NewPrincipal("idid", policy.Roles)
-			// principal.WithScope(data.ResourcePolicy.Scope)
 			resource := data.ResourcePolicy.Resource
 			actions := policy.Actions
 			r1 := client.NewResource(resource, "id")
 			if data.ResourcePolicy.Scope != "" {
 				r1.WithScope(data.ResourcePolicy.Scope)
 			}
-			// r1.WithScope(data.ResourcePolicy.Scope)
 			batch := client.NewResourceBatch()
 			batch.Add(r1, actions...)
 			resp, err := cli.CheckResources(context.Background(), principal, batch)
 			if err != nil {
-				g.JSON(400, gin.H{
+				g.JSON(http.StatusBadRequest, gin.H{
 					"error": err.Error(),
 				})
 				return
@@ -39,7 +38,7 @@ func CheckPolicy(datas *model.CerbosPayload, cli client.Client, g *gin.Context) 
 			responses = append(responses, response)
 		}
 	}
-	g.JSON(200, gin.H{
+	g.JSON(http.StatusOK, gin.H{
 		"res": responses,
 	})
 }
@@ -60,7 +59,7 @@ func AddPolicy(datas *model.CerbosPayload, cli client.AdminClient, g *gin.Contex
 			policySet := ps.AddResourcePolicies(resourcePolicy)
 			err := cli.AddOrUpdatePolicy(context.Background(), policySet)
 			if err != nil {
-				g.JSON(400, gin.H{
+				g.JSON(http.StatusBadRequest, gin.H{
 					"error": err.Error(),
 				})
 				return
@@ -72,7 +71,7 @@ func AddPolicy(datas *model.CerbosPayload, cli client.AdminClient, g *gin.Contex
 			responses = append(responses, response)
 		}
 	}
-	g.JSON(200, gin.H{
+	g.JSON(http.StatusOK, gin.H{
 		"Add policy response": responses,
 	})
 }
